@@ -80,17 +80,23 @@ const deleteTour =  (req, res) => {
   })
 }
 
-// All Routs
+// All Routs (old code)
 // Get all tours
-app.get('/api/v1/tours', getAllTours);
+// app.get('/api/v1/tours', getAllTours);
 // Adding a new tour
-app.post('/api/v1/tours', addNewTour);
+// app.post('/api/v1/tours', addNewTour);
 // Gat parameters from the url and use them
-app.get('/api/v1/tours/:id', getTourById);
+// app.get('/api/v1/tours/:id', getTourById);
 // patch request
-app.patch('/api/v1/tours/:id', updateTour);
+// app.patch('/api/v1/tours/:id', updateTour);
 // Delete
-app.delete('/api/v1/tours/:id', deleteTour);
+// app.delete('/api/v1/tours/:id', deleteTour);
+
+
+// All Routs (new Code)
+// Using route method chaining all routs together
+app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
+app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour)
 
 // Server Listen on port 3000
 const port = 3000;
