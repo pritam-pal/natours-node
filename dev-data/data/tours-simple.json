@@ -161,5 +161,12 @@
     "duration": 13,
     "maxGroupSize": 1,
     "difficulty": "easy"
+  },
+  {
+    "id": 13,
+    "name": "Test",
+    "duration": 18,
+    "maxGroupSize": 1,
+    "difficulty": "easy"
   }
 ]
