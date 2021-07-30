@@ -1,11 +1,21 @@
+'use strict'
+
+// ---- All requires ----
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
+
+// ---- Using express ----
 const app = express();
 
-// Middle Ware to use json function in express
+// ---- MiddleWares ----
+
+// Using morgan MiddleWare for login
+app.use(morgan('dev'));
+// MiddleWare to use json function in express
 app.use(express.json());
 
-// Custom Middle Wares
+// ---- Custom MiddleWares ----
 /*
   ---- Notes ----
   1. We need to use middle wares before request, response cycle end's ( route() function ).
@@ -25,10 +35,14 @@ app.use((req, res, next) => {
   next();
 })
 
+// ---- Initial File Reads ----
+
 // Reading json file when server starts
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
-// All Route functions
+// ---- All Route functions ----
+
+// Tour Routs
 const getAllTours = (req, res) => {
   console.log(req.requestTime)
   res.status(200).json({
@@ -102,7 +116,41 @@ const deleteTour =  (req, res) => {
   })
 }
 
-// All Routs (old code)
+// User Routs
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined! 😅'
+  })
+}
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined! 😅'
+  })
+}
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined! 😅'
+  })
+}
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined! 😅'
+  })
+}
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined! 😅'
+  })
+}
+
+
+// ---- All Routs (old code) ----
+
 // Get all tours
 // app.get('/api/v1/tours', getAllTours);
 // Adding a new tour
@@ -115,13 +163,20 @@ const deleteTour =  (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 
-// All Routs (new Code)
-// Using route method chaining all routs together
-app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
-app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour)
+// ---- All Routs (new Code) ----
 
-// Server Listen on port 3000
+// Using route methods to chaining all tour routs together
+app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
+app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour);
+
+// Using route methods to chaining all user routs together
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+// ---- Booting Server ----
+
+// Server Listening on port 3000 on localhost
 const port = 3000;
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
-})
+});
