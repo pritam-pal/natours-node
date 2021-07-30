@@ -2,8 +2,28 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
-// Middle Ware
+// Middle Ware to use json function in express
 app.use(express.json());
+
+// Custom Middle Wares
+/*
+  ---- Notes ----
+  1. We need to use middle wares before request, response cycle end's ( route() function ).
+  2. Must call next() function to goto the next middle wares.
+  3. We can update or add properties to the request object through middle wares.
+  4. Can be create as many as we want.
+  ---- O ----
+*/
+
+app.use((req, res, next) => {
+  console.log('Hello from the middle ware');
+  next();
+})
+
+app.use((res, req, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+})
 
 // Reading json file when server starts
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
