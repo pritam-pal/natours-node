@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use((res, req, next) => {
+app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 })
@@ -30,8 +30,10 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simpl
 
 // All Route functions
 const getAllTours = (req, res) => {
+  console.log(req.requestTime)
   res.status(200).json({
     status: 'success',
+    requestedTime: req.requestTime,
     result: tours.length,
     data: {
       tours
