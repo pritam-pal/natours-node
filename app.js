@@ -165,6 +165,7 @@ const deleteUser = (req, res) => {
 
 // ---- All Routs (new Code) ----
 
+/*
 // Using route methods to chaining all tour routs together
 app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
 app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour);
@@ -172,6 +173,23 @@ app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteT
 // Using route methods to chaining all user routs together
 app.route('/api/v1/users').get(getAllUsers).post(createUser);
 app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+*/
+
+// Updated version of routes using middle wares and Router express method
+
+const tourRoute = express.Router();
+const userRoute = express.Router();
+
+tourRoute.route('/').get(getAllTours).post(addNewTour);
+tourRoute.route('/:id').get(getTourById).patch(updateTour).delete(deleteTour);
+
+userRoute.route('/').get(getAllUsers).post(createUser);
+userRoute.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+// Using MiddleWares for mounting routes
+app.use('/api/v1/tours', tourRoute)
+app.use('/api/v1/users', tourRoute)
 
 // ---- Booting Server ----
 
