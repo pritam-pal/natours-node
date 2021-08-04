@@ -5,12 +5,15 @@ const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 
+const tourRouter = require('./routes/tourRouter');
+const userRouter = require('./routes/userRouter');
+
 // ---- Using express ----
 const app = express();
 
 // ---- MiddleWares ----
 
-// Using morgan MiddleWare for login
+// Using morgan MiddleWare for logging data
 app.use(morgan('dev'));
 // MiddleWare to use json function in express
 app.use(express.json());
@@ -35,161 +38,9 @@ app.use((req, res, next) => {
   next();
 })
 
-// ---- Initial File Reads ----
-
-// Reading json file when server starts
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
-
-// ---- All Route functions ----
-
-// Tour Routs
-const getAllTours = (req, res) => {
-  console.log(req.requestTime)
-  res.status(200).json({
-    status: 'success',
-    requestedTime: req.requestTime,
-    result: tours.length,
-    data: {
-      tours
-    }
-  })
-}
-
-const addNewTour = (req, res) => {
-  const newId = tours[tours.length - 1].id + 1;
-  const newTours = Object.assign({ id: newId }, req.body);
-  tours.push(newTours)
-  fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tours: newTours 
-      }
-    })
-  })
-}
-
-const getTourById =  (req, res) => {
-  console.log(req.params)
-
-  const tour = tours.find(el => el.id === Number(req.params.id))
-
-  if(tours.length < req.params.id) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    })
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour
-    }
-  })
-}
-
-const updateTour = (req, res) => {
-  if(Number(req.params.id) > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    });
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '<Updated tour is hear>'
-    }
-  });
-}
-
-const deleteTour =  (req, res) => {
-  if(Number(req.params.id) > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    });
-  }
-  res.status(204).json({
-    status: 'success',
-    data: null
-  })
-}
-
-// User Routs
-const getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined! 😅'
-  })
-}
-const getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined! 😅'
-  })
-}
-const createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined! 😅'
-  })
-}
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined! 😅'
-  })
-}
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined! 😅'
-  })
-}
-
-
-// ---- All Routs (old code) ----
-
-// Get all tours
-// app.get('/api/v1/tours', getAllTours);
-// Adding a new tour
-// app.post('/api/v1/tours', addNewTour);
-// Gat parameters from the url and use them
-// app.get('/api/v1/tours/:id', getTourById);
-// patch request
-// app.patch('/api/v1/tours/:id', updateTour);
-// Delete
-// app.delete('/api/v1/tours/:id', deleteTour);
-
-
-// ---- All Routs (new Code) ----
-
-/*
-// Using route methods to chaining all tour routs together
-app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
-app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour);
-
-// Using route methods to chaining all user routs together
-app.route('/api/v1/users').get(getAllUsers).post(createUser);
-app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser);
-
-*/
-
-// Updated version of routes using middle wares and Router express method
-
-const tourRoute = express.Router();
-const userRoute = express.Router();
-
-tourRoute.route('/').get(getAllTours).post(addNewTour);
-tourRoute.route('/:id').get(getTourById).patch(updateTour).delete(deleteTour);
-
-userRoute.route('/').get(getAllUsers).post(createUser);
-userRoute.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
-
 // Using MiddleWares for mounting routes
-app.use('/api/v1/tours', tourRoute)
-app.use('/api/v1/users', tourRoute)
+app.use('/api/v1/tours', tourRouter)
+app.use('/api/v1/users', userRouter)
 
 // ---- Booting Server ----
 
