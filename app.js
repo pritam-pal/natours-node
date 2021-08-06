@@ -42,10 +42,4 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
-// ---- Booting Server ----
-
-// Server Listening on port 3000 on localhost
-const port = 3000;
-app.listen(port, () => {
-  console.log(`App is listening on port ${port}`);
-});
+module.exports = app;

@@ -4,7 +4,7 @@
   "description": "Learn node and express",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon run app.js"
+    "start": "nodemon run server.js"
   },
   "author": "Pritam Pal",
   "license": "ISC",
