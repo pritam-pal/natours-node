@@ -1,7 +1,9 @@
 'use-strict';
+
 // ---- All requires ----
 const express = require('express');
 const tourController = require('../controllers/tourController');
+
 const router = express.Router();
 
 // This param middle ware is basically for checking the id if it is valid or not.

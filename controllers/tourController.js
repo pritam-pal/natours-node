@@ -26,7 +26,6 @@ exports.checkBody = (req, res, next) => {
 
 // Tour Routs
 exports.getAllTours = (req, res) => {
-  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     requestedTime: req.requestTime,
@@ -39,11 +38,15 @@ exports.getAllTours = (req, res) => {
 
 exports.addNewTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
+
+  // eslint-disable-next-line prefer-object-spread
   const newTours = Object.assign({ id: newId }, req.body);
+
   tours.push(newTours);
   fs.writeFile(
     `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
+    // eslint-disable-next-line no-unused-vars
     (err) => {
       res.status(201).json({
         status: 'success',
@@ -56,8 +59,6 @@ exports.addNewTour = (req, res) => {
 };
 
 exports.getTourById = (req, res) => {
-  console.log(req.params);
-
   const tour = tours.find((el) => el.id === Number(req.params.id));
 
   res.status(200).json({

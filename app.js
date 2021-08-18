@@ -1,7 +1,6 @@
-'use strict';
+'use-strict';
 
 // ---- All requires ----
-const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 
@@ -16,7 +15,10 @@ const app = express();
 // Using static for serving static files in express
 app.use(express.static(`${__dirname}/public/`));
 // Using morgan MiddleWare for logging data
-app.use(morgan('dev'));
+// console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 // MiddleWare to use json function in express
 app.use(express.json());
 
@@ -29,11 +31,6 @@ app.use(express.json());
   4. Can be create as many as we want.
   ---- O ----
 */
-
-app.use((req, res, next) => {
-  console.log('Hello from the middle ware');
-  next();
-});
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
