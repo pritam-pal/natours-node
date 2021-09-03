@@ -32,12 +32,7 @@ app.use(express.json());
   ---- O ----
 */
 
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
-
-// Using MiddleWares for mounting routes
+// Using use MiddleWares for mounting routes
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
