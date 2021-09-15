@@ -11,9 +11,16 @@ const router = express.Router();
 // If the id is not valid then the middleWare function will returns. And don't return any data.
 // router.param('id', tourController.checkId);
 
+// Aliasing Routes
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
+
+// Aggregation routes
+router.route('/tour-stats').get(tourController.getTourStats);
+router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+
+// Basic routes
 router
   .route('/')
   .get(tourController.getAllTours)
