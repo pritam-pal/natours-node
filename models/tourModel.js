@@ -13,6 +13,8 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name'],
       unique: [true, 'A tour name must be unique'],
       trim: true,
+      minlength: [10, 'A tour must have 10 or more character'],
+      maxlength: [40, 'A tour must have less or equal to 40 character'],
     },
     slug: String,
     duration: {
@@ -26,10 +28,18 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
+      // The enum validator is only work with strings
+      enum: {
+        value: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty ether easy, medium or difficult',
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      // The min and max validator not only work with numbers, it also work with dates
+      min: [1, 'Rating must be grater or equal to 1.0'],
+      max: [5, 'Rating must be less or equal to 5.0'],
     },
     ratingsQuantity: {
       type: Number,
@@ -39,7 +49,17 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a price'],
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      // Custom validator
+      validate: {
+        validator: function (val) {
+          // Hear this keyword only point to current doc or new document. It will not work with update.
+          return val < this.price;
+        },
+        message: 'The price discount ({VALUE}) must be less then regular price',
+      },
+    },
     summary: {
       type: String,
       required: [true, 'A tour must have a description'],
